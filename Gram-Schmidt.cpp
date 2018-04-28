@@ -40,7 +40,7 @@ mt19937 mt(seed());
 static const int dimension = 3;
 static const int num = 3;
 
-void gram_schimidt(vector<vector<double> > vec){
+void gram_schimidt(vector<vector<double> > &vec){
 
     vector<vector<double> > norm_vec;
 
@@ -57,13 +57,7 @@ void gram_schimidt(vector<vector<double> > vec){
         } 
         norm_vec.push_back(vec[k] / sqrt(inner_product(vec[k], vec[k])));
     }
-
-    for(auto v : norm_vec){
-        for(auto x : v){
-            cout << x << " ";
-        }
-        cout << endl;
-    }
+    vec = norm_vec;
 }
 
 int main(){
@@ -81,6 +75,13 @@ int main(){
 
     cout << "---orthogonalization---" << endl;
     gram_schimidt(vec);
+
+    for(auto v : vec){
+        for(auto x : v){
+            cout << x << " ";
+        }
+        cout << endl;
+    }
 
     return 0;
 }
