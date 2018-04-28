@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <vector>
 #include <random>
 using namespace std;
@@ -39,19 +40,30 @@ mt19937 mt(seed());
 static const int dimension = 3;
 static const int num = 3;
 
-void gram_schimidt(vector<vector<double> > &vec){
+void gram_schimidt(vector<vector<double> > vec){
 
-    vector<vector<double> > norm_vec(num, vector<double>(dimension));
+    vector<vector<double> > norm_vec;
 
-    for(int k = 0; k < num; k++){
+    for(int k = 0; k < vec.size(); k++){
         vector<double> sum_vec(dimension, 0);
         for(int i = 0; i < k; i++){
             sum_vec += inner_product(vec[k], norm_vec[i]) * norm_vec[i];
         }
         vec[k] -= sum_vec;
-        norm_vec[k] = vec[k] / sqrt(inner_product(vec[k], vec[k]));
+        if(count(vec[k].begin(), vec[k].end(), 0) == dimension){
+            vec.erase(vec.begin() + k);
+            k--;
+            continue;
+        } 
+        norm_vec.push_back(vec[k] / sqrt(inner_product(vec[k], vec[k])));
     }
-    vec = norm_vec;
+
+    for(auto v : norm_vec){
+        for(auto x : v){
+            cout << x << " ";
+        }
+        cout << endl;
+    }
 }
 
 int main(){
@@ -69,13 +81,6 @@ int main(){
 
     cout << "---orthogonalization---" << endl;
     gram_schimidt(vec);
-
-    for(auto v : vec){
-        for(auto x : v){
-            cout << x << " ";
-        }
-        cout << endl;
-    }
 
     return 0;
 }
